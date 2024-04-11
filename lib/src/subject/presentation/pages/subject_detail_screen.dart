@@ -159,6 +159,9 @@ class _SubjectDetailScreenState extends State<SubjectDetailScreen> {
                             'Department: ${widget.subject.department.name}',
                           ),
                           Text(
+                            'Department code: ${widget.subject.department.code}',
+                          ),
+                          Text(
                             'Year Level: ${widget.subject.yearLevel}',
                           )
                         ],

@@ -76,7 +76,7 @@ class StudentDrawer extends StatelessWidget {
               context: context,
               builder: (BuildContext context) => AlertDialog(
                 title: const CustomText(text: AppConstant.appName),
-                content: const Text('Are you sure you want to logout?'),
+                content: const Text('Are you sure? you want to logout?.'),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () => Navigator.pop(context, 'Cancel'),

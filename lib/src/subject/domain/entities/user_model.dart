@@ -5,6 +5,7 @@ class UserModel {
   final String lastName;
   final String userName;
   final String getFullName;
+  final bool isNewUser;
 
   UserModel({
     required this.pk,
@@ -13,6 +14,7 @@ class UserModel {
     required this.lastName,
     required this.userName,
     required this.getFullName,
+    required this.isNewUser,
   });
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
@@ -23,6 +25,7 @@ class UserModel {
       lastName: map['last_name'] as String,
       userName: map['username'] as String,
       getFullName: map['get_full_name'] as String,
+      isNewUser: map['is_new_user'] as bool,
     );
   }
 }

@@ -4,19 +4,32 @@ import 'package:ease_studyante_app/core/common_widget/custom_appbar.dart';
 import 'package:ease_studyante_app/core/config/app_constant.dart';
 import 'package:ease_studyante_app/core/enum/view_status.dart';
 import 'package:ease_studyante_app/src/teacher/bloc/teacher_bloc.dart';
-import 'package:ease_studyante_app/src/teacher/pages/chat/bloc/bloc/teacher_chat_bloc.dart';
+import 'package:ease_studyante_app/src/teacher/pages/chat/bloc/chat/teacher_chat_bloc.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/presentation/widgets/chat_bubble.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/presentation/widgets/chat_input.dart';
+import 'package:ease_studyante_app/src/teacher/pages/home/domain/entities/student.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/io.dart';
 
 import 'package:flutter/material.dart';
 
+class TeacherChatArgs {
+  final Student student;
+  final String rooName;
+
+  TeacherChatArgs({
+    required this.student,
+    required this.rooName,
+  });
+}
+
 class TeacherChatScreen extends StatefulWidget {
   static const String routeName = '/teacher/chat';
 
-  const TeacherChatScreen({super.key});
+  final TeacherChatArgs args;
+
+  const TeacherChatScreen({super.key, required this.args});
 
   @override
   State<TeacherChatScreen> createState() => _TeacherChatScreenState();
@@ -27,6 +40,7 @@ class _TeacherChatScreenState extends State<TeacherChatScreen> {
   late IOWebSocketChannel channel;
   late String email;
   final TextEditingController textEditingController = TextEditingController();
+  ValueNotifier<bool> isDisabled = ValueNotifier(true);
 
   @override
   void initState() {
@@ -36,6 +50,10 @@ class _TeacherChatScreenState extends State<TeacherChatScreen> {
     email = getUserEmail();
     // initialize websocket channel
     initChannel();
+
+    textEditingController.addListener(() {
+      isDisabled.value = textEditingController.value.text.trim().isEmpty;
+    });
   }
 
   @override
@@ -47,7 +65,10 @@ class _TeacherChatScreenState extends State<TeacherChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(context: context, title: 'Chat'),
+      appBar: buildAppBar(
+          context: context,
+          title:
+              '${widget.args.student.user.firstName} ${widget.args.student.user.lastName}'),
       body: BlocBuilder<TeacherChatBloc, TeacherChatState>(
         builder: (context, state) {
           if (state.viewStatus == ViewStatus.loading) {
@@ -80,12 +101,17 @@ class _TeacherChatScreenState extends State<TeacherChatScreen> {
                     itemCount: state.chatModel.chats.length,
                   ),
                 ),
-                ChatInput(
-                  controller: textEditingController,
-                  onSend: (value) {
-                    onSendChatMessage(value);
+                ValueListenableBuilder(
+                  valueListenable: isDisabled,
+                  builder: (BuildContext context, bool value, Widget? child) {
+                    return ChatInput(
+                      controller: textEditingController,
+                      onSend: (value) {
+                        onSendChatMessage(value);
+                      },
+                      isDisabled: value,
+                    );
                   },
-                  isDisabled: textEditingController.value.text.isEmpty,
                 ),
               ],
             ),
@@ -131,9 +157,8 @@ class _TeacherChatScreenState extends State<TeacherChatScreen> {
 
     try {
       // student_id + teacher_id
-      String roomName =
-          'da2ecb1c-d6bd-4ba1-9142-a345dbcc5e27edf6bd03-a331-4ccf-8825-8cfd2c268ae8';
-      wsUrl = Uri.parse('ws://${AppConstant.serverHost}/ws/chat/$roomName/');
+      String roomName = widget.args.rooName;
+      wsUrl = Uri.parse('wss://${AppConstant.serverHost}/ws/chat/$roomName/');
       channel = IOWebSocketChannel.connect(wsUrl);
 
       await channel.ready;

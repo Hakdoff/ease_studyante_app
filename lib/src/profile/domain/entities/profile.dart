@@ -9,6 +9,7 @@ class Profile {
   final String profilePk;
   final String? profilePhoto;
   final String gender;
+  final bool isNewUser;
 
   Profile({
     required this.pk,
@@ -18,6 +19,7 @@ class Profile {
     required this.email,
     required this.profilePk,
     required this.gender,
+    required this.isNewUser,
     this.profilePhoto,
   });
 
@@ -30,6 +32,7 @@ class Profile {
       email: '',
       profilePk: '',
       gender: '',
+      isNewUser: false,
     );
   }
 
@@ -42,6 +45,7 @@ class Profile {
     String? profilePk,
     String? profilePhoto,
     String? gender,
+    bool? isNewUser,
   }) {
     return Profile(
       pk: pk ?? this.pk,
@@ -52,6 +56,7 @@ class Profile {
       profilePk: profilePk ?? this.profilePk,
       profilePhoto: profilePhoto ?? this.profilePhoto,
       gender: gender ?? this.gender,
+      isNewUser: isNewUser ?? this.isNewUser,
     );
   }
 
@@ -65,6 +70,7 @@ class Profile {
       'profilePk': profilePk,
       'profilePhoto': profilePhoto,
       'gender': gender,
+      'isNewUser': isNewUser,
     };
   }
 
@@ -79,6 +85,7 @@ class Profile {
       profilePhoto:
           map['profilePhoto'] != null ? map['profilePhoto'] as String : null,
       gender: map['gender'] as String,
+      isNewUser: map['is_new_user'] as bool,
     );
   }
 
@@ -89,7 +96,7 @@ class Profile {
 
   @override
   String toString() {
-    return 'Profile(pk: $pk, username: $username, gender: $gender, firstName: $firstName, lastName: $lastName, email: $email, profilePk: $profilePk, profilePhoto: $profilePhoto)';
+    return 'Profile(pk: $pk, username: $username, gender: $gender, firstName: $firstName, lastName: $lastName, email: $email, profilePk: $profilePk, profilePhoto: $profilePhoto, isNewUser: $isNewUser)';
   }
 
   @override
@@ -103,7 +110,8 @@ class Profile {
         other.email == email &&
         other.gender == gender &&
         other.profilePk == profilePk &&
-        other.profilePhoto == profilePhoto;
+        other.profilePhoto == profilePhoto &&
+        other.isNewUser == isNewUser;
   }
 
   @override
@@ -115,6 +123,7 @@ class Profile {
         email.hashCode ^
         gender.hashCode ^
         profilePk.hashCode ^
-        profilePhoto.hashCode;
+        profilePhoto.hashCode ^
+        isNewUser.hashCode;
   }
 }

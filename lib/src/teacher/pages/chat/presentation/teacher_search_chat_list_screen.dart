@@ -1,54 +1,59 @@
+import 'package:ease_studyante_app/core/common_widget/custom_appbar.dart';
 import 'package:ease_studyante_app/core/enum/view_status.dart';
 import 'package:ease_studyante_app/src/chat/presentation/pages/widgets/chat_tile.dart';
 import 'package:ease_studyante_app/src/teacher/bloc/teacher_bloc.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/bloc/chat/teacher_chat_bloc.dart';
-import 'package:ease_studyante_app/src/teacher/pages/chat/bloc/chat_list/teacher_chat_list_bloc.dart';
+import 'package:ease_studyante_app/src/teacher/pages/chat/bloc/search_chat_list/search_teacher_chat_list_bloc.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/data/data_sources/teacher_chat_repository_impl.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/domain/repositories/teacher_chat_repository.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/presentation/teacher_chat_screen.dart';
-import 'package:ease_studyante_app/src/teacher/pages/chat/presentation/teacher_search_chat_list_screen.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/presentation/widgets/search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
 
-class TeacherChatListScreen extends StatefulWidget {
-  static const String routeName = '/teacher/chat-list';
+class TeacherSearchChatListScreen extends StatefulWidget {
+  static const String routeName = '/teacher/chat-list/search';
 
-  const TeacherChatListScreen({super.key});
+  const TeacherSearchChatListScreen({super.key});
 
   @override
-  State<TeacherChatListScreen> createState() => _TeacherChatListScreenState();
+  State<TeacherSearchChatListScreen> createState() =>
+      _TeacherSearchChatListScreenState();
 }
 
-class _TeacherChatListScreenState extends State<TeacherChatListScreen> {
+class _TeacherSearchChatListScreenState
+    extends State<TeacherSearchChatListScreen> {
   final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    context.read<TeacherChatListBloc>().add(const OnSearchStudentEvent(' '));
+    context
+        .read<SearchTeacherChatListBloc>()
+        .add(const OnSearchStudentEvent(' '));
     handleEventScrollListener();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: buildAppBar(context: context, title: 'Search'),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SearchField(
-              onTap: () {
-                Navigator.of(context).pushNamed(
-                  TeacherSearchChatListScreen.routeName,
-                );
-              },
-              readOnly: true,
+              onTap: () {},
               hintText: 'Search student...',
+              onFieldSubmitted: (value) {
+                context
+                    .read<SearchTeacherChatListBloc>()
+                    .add(OnSearchStudentEvent(value));
+              },
             ),
           ),
-          BlocBuilder<TeacherChatListBloc, TeacherChatListState>(
+          BlocBuilder<SearchTeacherChatListBloc, SearchTeacherChatListState>(
             builder: (context, state) {
               if (state.viewStatus == ViewStatus.loading) {
                 return const Expanded(
@@ -64,7 +69,26 @@ class _TeacherChatListScreenState extends State<TeacherChatListScreen> {
                 );
               }
 
+              if (state.studentList.students.isEmpty) {
+                return const Expanded(
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.search,
+                          size: 50,
+                        ),
+                        Text('Student not found'),
+                      ],
+                    ),
+                  ),
+                );
+              }
+
               return ListView.separated(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
                 shrinkWrap: true,
                 itemCount: state.studentList.students.length,
                 itemBuilder: (context, index) {
@@ -120,7 +144,7 @@ class _TeacherChatListScreenState extends State<TeacherChatListScreen> {
       if (scrollController.position.pixels >
           (scrollController.position.pixels * 0.75)) {
         context
-            .read<TeacherChatListBloc>()
+            .read<SearchTeacherChatListBloc>()
             .add(const OnPaginateSearchStudentEventt(' '));
       }
     });

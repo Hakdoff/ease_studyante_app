@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
-
 import 'package:ease_studyante_app/src/teacher/pages/chat/domain/entities/chat.dart';
+import 'package:equatable/equatable.dart';
 
 class ChatModel extends Equatable {
   final String? nextPage;

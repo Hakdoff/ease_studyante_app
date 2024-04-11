@@ -3,11 +3,14 @@ import 'package:ease_studyante_app/src/chat/data/repository/chat_repository_impl
 import 'package:ease_studyante_app/src/chat/presentation/bloc/chat/chat_bloc.dart';
 import 'package:ease_studyante_app/src/chat/presentation/pages/chat_screen.dart';
 import 'package:ease_studyante_app/src/landing/presentation/landing_page.dart';
-import 'package:ease_studyante_app/src/teacher/pages/chat/bloc/bloc/teacher_chat_bloc.dart';
+import 'package:ease_studyante_app/src/teacher/pages/chat/bloc/chat/teacher_chat_bloc.dart';
+import 'package:ease_studyante_app/src/teacher/pages/chat/bloc/chat_list/teacher_chat_list_bloc.dart';
+import 'package:ease_studyante_app/src/teacher/pages/chat/bloc/search_chat_list/search_teacher_chat_list_bloc.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/data/data_sources/teacher_chat_repository_impl.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/domain/repositories/teacher_chat_repository.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/presentation/teacher_chat_list_screen.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/presentation/teacher_chat_screen.dart';
+import 'package:ease_studyante_app/src/teacher/pages/chat/presentation/teacher_search_chat_list_screen.dart';
 import 'package:ease_studyante_app/src/teacher/pages/qr_code/presentation/teacher_qr_code_scanner.dart';
 import 'package:ease_studyante_app/src/teacher/pages/student/data/data_sources/student_list_repository_impl.dart';
 import 'package:ease_studyante_app/src/teacher/pages/student/domain/repositories/student_list_reopsitory.dart';
@@ -97,13 +100,23 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
 
     case TeacherChatListScreen.routeName:
       return PageTransition(
-        child: const TeacherChatListScreen(),
+        child: RepositoryProvider<TeacherChatRepository>(
+          create: (context) => TeacherChatRepositoryImpl(),
+          child: BlocProvider<TeacherChatListBloc>(
+            create: (context) => TeacherChatListBloc(
+              RepositoryProvider.of<TeacherChatRepository>(context),
+            ),
+            child: const TeacherChatListScreen(),
+          ),
+        ),
         duration: const Duration(milliseconds: 250),
         settings: settings,
         type: PageTransitionType.fade,
       );
 
     case TeacherChatScreen.routeName:
+      final args = settings.arguments! as TeacherChatArgs;
+
       return PageTransition(
         child: RepositoryProvider<TeacherChatRepository>(
           create: (context) => TeacherChatRepositoryImpl(),
@@ -111,7 +124,9 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
             create: (context) => TeacherChatBloc(
               RepositoryProvider.of<TeacherChatRepository>(context),
             ),
-            child: const TeacherChatScreen(),
+            child: TeacherChatScreen(
+              args: args,
+            ),
           ),
         ),
         duration: const Duration(milliseconds: 250),
@@ -129,6 +144,22 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
               RepositoryProvider.of<ChatRepository>(context),
             ),
             child: ChatScreen(args: args),
+          ),
+        ),
+        duration: const Duration(milliseconds: 250),
+        settings: settings,
+        type: PageTransitionType.fade,
+      );
+
+    case TeacherSearchChatListScreen.routeName:
+      return PageTransition(
+        child: RepositoryProvider<TeacherChatRepository>(
+          create: (context) => TeacherChatRepositoryImpl(),
+          child: BlocProvider<SearchTeacherChatListBloc>(
+            create: (context) => SearchTeacherChatListBloc(
+              RepositoryProvider.of<TeacherChatRepository>(context),
+            ),
+            child: const TeacherSearchChatListScreen(),
           ),
         ),
         duration: const Duration(milliseconds: 250),

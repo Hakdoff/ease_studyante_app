@@ -16,7 +16,11 @@ class StudentListResponseModel extends Equatable {
   });
 
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [
+        students,
+        nextPage,
+        totalCount,
+      ];
 
   factory StudentListResponseModel.fromMap(Map<String, dynamic> map) {
     return StudentListResponseModel(
@@ -38,6 +42,9 @@ class StudentListResponseModel extends Equatable {
       nextPage: nextPage ?? this.nextPage,
     );
   }
+
+  factory StudentListResponseModel.empty() =>
+      const StudentListResponseModel(students: [], totalCount: -1);
 
   factory StudentListResponseModel.fromJson(String source) =>
       StudentListResponseModel.fromMap(json.decode(source));

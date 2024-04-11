@@ -3,12 +3,18 @@ import 'package:ease_studyante_app/core/bloc/bloc/global_bloc.dart';
 import 'package:ease_studyante_app/core/common_widget/custom_text.dart';
 import 'package:ease_studyante_app/core/config/app_constant.dart';
 import 'package:ease_studyante_app/gen/colors.gen.dart';
+import 'package:ease_studyante_app/src/change_password/data/blocs/bloc/change_password_bloc.dart';
+import 'package:ease_studyante_app/src/change_password/data/repository/change_password_repository.dart';
+import 'package:ease_studyante_app/src/change_password/data/repository/change_password_repository_impl.dart';
+import 'package:ease_studyante_app/src/change_password/presentation/pages/change_password_screen.dart';
 import 'package:ease_studyante_app/src/chat/presentation/pages/chat_list_screen.dart';
 import 'package:ease_studyante_app/src/home/presentation/pages/student_drawer.dart';
 import 'package:ease_studyante_app/src/landing/presentation/landing_page.dart';
+
 import 'package:ease_studyante_app/src/subject/presentation/pages/subject_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:page_transition/page_transition.dart';
 
 class StudentHome extends StatefulWidget {
   const StudentHome({super.key});
@@ -38,8 +44,32 @@ class _StudentHomeState extends State<StudentHome> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GlobalBloc, GlobalState>(
+    return BlocConsumer<GlobalBloc, GlobalState>(
       bloc: globalBloc,
+      listener: (context, state) {
+        if (state.studentProfile.isNewUser) {
+          Navigator.push(
+            context,
+            PageTransition(
+              duration: const Duration(milliseconds: 250),
+              type: PageTransitionType.fade,
+              child: RepositoryProvider<ChangePasswordRepository>(
+                create: (context) => ChangePasswordRepositoryImpl(),
+                child: BlocProvider<ChangePasswordBloc>(
+                  create: (context) => ChangePasswordBloc(
+                    changePasswordRepository:
+                        RepositoryProvider.of<ChangePasswordRepository>(
+                            context),
+                  ),
+                  child: const ChangePasswordScreen(
+                    isStudent: true,
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+      },
       builder: (context, state) {
         return ValueListenableBuilder(
           valueListenable: selectedIndex,
