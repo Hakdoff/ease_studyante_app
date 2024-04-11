@@ -1,0 +1,10 @@
+<resources>
+    <color name="dim_gray">#494E56</color>
+    <color name="gray">#DCDCDC</color>
+    <color name="primary">#FF3D3D</color>
+    <color name="secondary">#EBE7E8</color>
+    <color name="error">#B00020</color>
+    <color name="place_holder">#FF494E56</color>
+    <color name="border">#FFCED3DD</color>
+    <color name="background">#EAEAEA</color>
+</resources>
