@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:ease_studyante_app/core/enum/view_status.dart';
 import 'package:ease_studyante_app/src/profile/domain/entities/profile.dart';
+import 'package:ease_studyante_app/src/subject/domain/entities/schedule_model.dart';
 import 'package:ease_studyante_app/src/teacher/pages/home/domain/entities/section.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,10 +17,12 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
             studentProfile: Profile.empty(),
             viewStatus: ViewStatus.none,
             studentSection: Section.empty(),
+            studentSchedule: const [],
           ),
         ) {
     on<StoreStudentProfileEvent>(_onStoreStudentProfileEvent);
     on<StoreStudentSectionEvent>(_onStoreStudentSectionEvent);
+    on<StoreStudentScheduleEvent>(_onStoreStudentScheduleEvent);
   }
 
   FutureOr<void> _onStoreStudentProfileEvent(
@@ -40,6 +43,17 @@ class GlobalBloc extends Bloc<GlobalEvent, GlobalState> {
     emit(
       state.copyWith(
         studentSection: event.section,
+      ),
+    );
+  }
+
+  FutureOr<void> _onStoreStudentScheduleEvent(
+    StoreStudentScheduleEvent event,
+    Emitter<GlobalState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        studentSchedule: event.schedule,
       ),
     );
   }

@@ -43,6 +43,16 @@ class User extends Equatable {
     );
   }
 
+  factory User.empty() {
+    return const User(
+      pk: '',
+      email: '',
+      firstName: '',
+      lastName: '',
+      fullName: '',
+    );
+  }
+
   factory User.fromJson(String source) => User.fromMap(json.decode(source));
 
   @override

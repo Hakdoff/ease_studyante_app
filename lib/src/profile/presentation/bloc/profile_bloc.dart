@@ -21,6 +21,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<SetProfilePicture>(_setProfilePicture);
     on<OnGetProfileEvent>(_onGetProfileEvent);
     on<OnGetStudentProfileEvent>(_onGetStudentProfileEvent);
+    on<OnGetParentProfileEvent>(_onOnGetParentProfileEvent);
   }
 
   Future<void> _setProfile(
@@ -81,6 +82,33 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       final response = await repository.getStudentProfile();
       await LocalStorage.storeLocalStorage(
         '_studentProfile',
+        response.toString(),
+      );
+
+      emit(
+        ProfileLoaded(
+          profile: response,
+        ),
+      );
+    } catch (e) {
+      emit(
+        ProfileError(
+          errorMessage: e.toString(),
+        ),
+      );
+    }
+  }
+
+  FutureOr<void> _onOnGetParentProfileEvent(
+    OnGetParentProfileEvent event,
+    Emitter<ProfileState> emit,
+  ) async {
+    try {
+      emit(ProfileLoading());
+
+      final response = await repository.getParentProfile();
+      await LocalStorage.storeLocalStorage(
+        '_parentProfile',
         response.toString(),
       );
 

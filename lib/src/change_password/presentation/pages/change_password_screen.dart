@@ -85,6 +85,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               parametersValidate: 'required',
                               keyboardType: TextInputType.text,
                               textController: currentPassword,
+                              obscureText: true,
                               validators: (value) {
                                 if (value != null) {
                                   return null;
@@ -120,6 +121,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               parametersValidate: 'required',
                               keyboardType: TextInputType.text,
                               textController: newPassword,
+                              obscureText: true,
                               validators: (value) {
                                 if (value != null) {
                                   return null;
@@ -155,6 +157,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               parametersValidate: 'required',
                               keyboardType: TextInputType.text,
                               textController: confirmPassword,
+                              obscureText: true,
                               validators: (value) {
                                 if (value != null) {
                                   return null;

@@ -13,17 +13,32 @@ class AttendanceItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formattedDate = DateFormat.yMMMMd('en_US').format(
-      DateTime.parse(
-        studentAttendance.timeIn,
-      ),
-    );
-    final formattedTime = DateFormat.Hms().format(
-      DateTime.parse(
-        studentAttendance.timeIn,
-      ),
-    );
-    final status = studentAttendance.isPresent ? 'Present' : 'Tardy';
+    String formattedDate = '';
+    String formattedTime = '';
+    final timeIn = studentAttendance.timeIn;
+
+    if (timeIn != null) {
+      formattedDate = DateFormat.yMMMMd('en_US').format(
+        DateTime.parse(
+          timeIn,
+        ),
+      );
+
+      formattedTime = DateFormat.jm().format(
+        DateTime.parse(
+          timeIn,
+        ).add(
+          const Duration(
+            hours: 8,
+          ),
+        ),
+      );
+    }
+    final status = studentAttendance.timeIn == null
+        ? "Absent"
+        : studentAttendance.isPresent
+            ? 'Present'
+            : 'Tardy';
     final statusColor =
         status != 'Present' ? Colors.red[400] : Colors.green[400];
 
@@ -55,7 +70,7 @@ class AttendanceItemWidget extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                'Date: $formattedDate',
+                'Date: ${studentAttendance.attendanceDate}',
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 12,
@@ -85,13 +100,15 @@ class AttendanceItemWidget extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              Text(
-                'Time In: $formattedTime',
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
+              if (timeIn != null) ...[
+                Text(
+                  'Time In: $formattedTime',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                  ),
                 ),
-              ),
+              ],
             ],
           ),
         ],

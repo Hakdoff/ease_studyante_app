@@ -49,4 +49,17 @@ class ProfileRepositoryImpl extends ProfileRepository {
       throw error!;
     });
   }
+
+  @override
+  Future<Profile> getParentProfile() async {
+    const String url = '${AppConstant.apiUrl}/parent/profile';
+    return await ApiInterceptor.apiInstance().get(url).then((value) {
+      final response = Profile.fromMap(value.data);
+      return response;
+    }).catchError((error) {
+      throw error;
+    }).onError((error, stackTrace) {
+      throw error!;
+    });
+  }
 }

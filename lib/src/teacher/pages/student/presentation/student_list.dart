@@ -1,3 +1,4 @@
+import 'package:ease_studyante_app/core/common_widget/common_dialog.dart';
 import 'package:ease_studyante_app/core/common_widget/custom_appbar.dart';
 import 'package:ease_studyante_app/core/common_widget/custom_text.dart';
 import 'package:ease_studyante_app/src/teacher/pages/home/domain/entities/teacher_schedule.dart';
@@ -41,7 +42,18 @@ class _StudentListPageState extends State<StudentListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context: context, title: widget.args.appbarTitle),
-      body: BlocBuilder<StudentListBloc, StudentListState>(
+      body: BlocConsumer<StudentListBloc, StudentListState>(
+        bloc: studentListBloc,
+        listener: (context, state) {
+          if (state is PostStudentTimeOutSuccessState) {
+            CommonDialog.showMyDialog(
+              context: context,
+              body: 'Timeout Recorded',
+            ).then(
+              (value) => Navigator.pop(context),
+            );
+          }
+        },
         builder: (context, state) {
           if (state is StudentListError) {
             return Center(
@@ -54,6 +66,7 @@ class _StudentListPageState extends State<StudentListPage> {
               isPaginate: state.isPaginate,
               students: state.studentList.students,
               schedule: widget.args.schedule,
+              bloc: studentListBloc,
             );
           }
           return const Center(
@@ -65,8 +78,12 @@ class _StudentListPageState extends State<StudentListPage> {
   }
 
   void initBloc() {
-    studentListBloc
-        .add(OnGetTeacherStudentList(section: widget.args.schedule.section.id));
+    studentListBloc.add(
+      OnGetTeacherStudentList(
+        section: widget.args.schedule.section.id,
+        teacherScheduleId: widget.args.schedule.id,
+      ),
+    );
   }
 
   void handleEventScrollListener() {
@@ -74,8 +91,11 @@ class _StudentListPageState extends State<StudentListPage> {
       if (scrollController.position.pixels >
           (scrollController.position.pixels * 0.75)) {
         BlocProvider.of<StudentListBloc>(context).add(
-            OnPaginateTeacherStudentList(
-                section: widget.args.schedule.section.id));
+          OnPaginateTeacherStudentList(
+            section: widget.args.schedule.section.id,
+            teacherScheduleId: widget.args.schedule.id,
+          ),
+        );
       }
     });
   }

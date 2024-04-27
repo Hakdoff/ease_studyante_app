@@ -22,8 +22,13 @@ class LandingBody extends StatelessWidget {
             ),
             const Gap(30),
             CustomBtn(
-              label: 'Login as Parent/Student',
-              onTap: () => handleOnTapParentStudent(context),
+              label: 'Login as Parent',
+              onTap: () => handleOnTapParent(context),
+            ),
+            const Gap(30),
+            CustomBtn(
+              label: 'Login as Student',
+              onTap: () => handleOnTapStudent(context),
             ),
           ],
         ),
@@ -37,15 +42,30 @@ class LandingBody extends StatelessWidget {
       arguments: LoginArgs(
         isTeacher: true,
         isStudent: false,
+        isParent: false,
       ),
     );
   }
 
-  void handleOnTapParentStudent(BuildContext context) {
-    Navigator.of(context).pushNamed(LoginPage.routeName,
-        arguments: LoginArgs(
-          isTeacher: false,
-          isStudent: true,
-        ));
+  void handleOnTapStudent(BuildContext context) {
+    Navigator.of(context).pushNamed(
+      LoginPage.routeName,
+      arguments: LoginArgs(
+        isTeacher: false,
+        isStudent: true,
+        isParent: false,
+      ),
+    );
+  }
+
+  void handleOnTapParent(BuildContext context) {
+    Navigator.of(context).pushNamed(
+      LoginPage.routeName,
+      arguments: LoginArgs(
+        isTeacher: false,
+        isStudent: false,
+        isParent: true,
+      ),
+    );
   }
 }

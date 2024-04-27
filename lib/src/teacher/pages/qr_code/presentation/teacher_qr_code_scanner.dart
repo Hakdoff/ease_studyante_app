@@ -110,8 +110,7 @@ class _TeacherQRCodeScannerState extends State<TeacherQRCodeScanner> {
                       children: [
                         const Expanded(
                           child: CustomText(
-                            text:
-                                'QR code info: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam',
+                            text: 'QR code info: Please scan students QR Code.',
                           ),
                         ),
                         if (isHideScanner) ...[

@@ -10,7 +10,6 @@ import 'package:ease_studyante_app/src/change_password/data/repository/change_pa
 import 'package:ease_studyante_app/src/change_password/presentation/pages/change_password_screen.dart';
 import 'package:ease_studyante_app/src/landing/presentation/landing_page.dart';
 import 'package:ease_studyante_app/src/teacher/bloc/teacher_bloc.dart';
-import 'package:ease_studyante_app/src/teacher/pages/chat/bloc/chat_list/teacher_chat_list_bloc.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/data/data_sources/teacher_chat_repository_impl.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/presentation/teacher_chat_list_screen.dart';
 import 'package:ease_studyante_app/src/teacher/pages/home/data/data_sources/teacher_schedule_repository_impl.dart';
@@ -21,6 +20,8 @@ import 'package:ease_studyante_app/src/teacher/pages/schedule/presentation/teach
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
+
+import 'pages/chat/bloc/chat_list/teacher_chat_list_bloc.dart';
 
 class TeacherHomePage extends StatefulWidget {
   static const String routeName = '/';
@@ -33,6 +34,7 @@ class TeacherHomePage extends StatefulWidget {
 class _TeacherHomePageState extends State<TeacherHomePage> {
   late TeacherScheduleBloc teacherScheduleBloc;
   late GlobalBloc globalBloc;
+  late TeacherBloc teacherBloc;
   int _bottomNavIndex = 0;
   final iconList = <IconData>[
     Icons.home,
@@ -51,6 +53,7 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
     super.initState();
     teacherScheduleBloc = TeacherScheduleBloc(TeacherScheduleRepositoryImpl());
     globalBloc = BlocProvider.of<GlobalBloc>(context);
+    teacherBloc = BlocProvider.of<TeacherBloc>(context);
   }
 
   @override
@@ -64,30 +67,32 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
             create: (context) =>
                 TeacherChatListBloc(TeacherChatRepositoryImpl())),
       ],
-      child: BlocListener<GlobalBloc, GlobalState>(
-        bloc: globalBloc,
+      child: BlocListener<TeacherBloc, TeacherState>(
+        bloc: teacherBloc,
         listener: (context, state) {
-          if (state.studentProfile.isNewUser) {
-            Navigator.push(
-              context,
-              PageTransition(
-                duration: const Duration(milliseconds: 250),
-                type: PageTransitionType.fade,
-                child: RepositoryProvider<ChangePasswordRepository>(
-                  create: (context) => ChangePasswordRepositoryImpl(),
-                  child: BlocProvider<ChangePasswordBloc>(
-                    create: (context) => ChangePasswordBloc(
-                      changePasswordRepository:
-                          RepositoryProvider.of<ChangePasswordRepository>(
-                              context),
-                    ),
-                    child: const ChangePasswordScreen(
-                      isStudent: false,
+          if (state is TeacherLoaded) {
+            if (state.teacher.isNewUser) {
+              Navigator.push(
+                context,
+                PageTransition(
+                  duration: const Duration(milliseconds: 250),
+                  type: PageTransitionType.fade,
+                  child: RepositoryProvider<ChangePasswordRepository>(
+                    create: (context) => ChangePasswordRepositoryImpl(),
+                    child: BlocProvider<ChangePasswordBloc>(
+                      create: (context) => ChangePasswordBloc(
+                        changePasswordRepository:
+                            RepositoryProvider.of<ChangePasswordRepository>(
+                                context),
+                      ),
+                      child: const ChangePasswordScreen(
+                        isStudent: false,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
+              );
+            }
           }
         },
         child: Scaffold(

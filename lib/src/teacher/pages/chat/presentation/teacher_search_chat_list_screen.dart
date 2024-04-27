@@ -69,7 +69,7 @@ class _TeacherSearchChatListScreenState
                 );
               }
 
-              if (state.studentList.students.isEmpty) {
+              if (state.userListResponseModel.users.isEmpty) {
                 return const Expanded(
                   child: Center(
                     child: Column(
@@ -90,18 +90,18 @@ class _TeacherSearchChatListScreenState
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
                 shrinkWrap: true,
-                itemCount: state.studentList.students.length,
+                itemCount: state.userListResponseModel.users.length,
                 itemBuilder: (context, index) {
-                  final student = state.studentList.students[index];
+                  final user = state.userListResponseModel.users[index];
                   // ROOM_NAME student + teacher ids
                   return ChatTile(
-                    id: student.user.pk,
-                    name: '${student.user.firstName} ${student.user.lastName}',
+                    id: user.pk,
+                    name: '${user.firstName} ${user.lastName}',
                     onTap: () {
                       final teacherId = getCurrentUserId();
 
                       if (teacherId.isNotEmpty) {
-                        final roomName = student.user.pk + teacherId;
+                        final roomName = user.pk + teacherId;
 
                         Navigator.push(
                           context,
@@ -116,7 +116,7 @@ class _TeacherSearchChatListScreenState
                                 child: TeacherChatScreen(
                                   args: TeacherChatArgs(
                                     rooName: roomName,
-                                    student: student,
+                                    user: user,
                                   ),
                                 ),
                               ),

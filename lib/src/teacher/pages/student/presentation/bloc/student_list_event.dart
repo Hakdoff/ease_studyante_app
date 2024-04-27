@@ -9,8 +9,40 @@ abstract class StudentListEvent extends Equatable {
 
 class OnGetTeacherStudentList extends StudentListEvent {
   final String section;
+  final String teacherScheduleId;
 
   const OnGetTeacherStudentList({
+    required this.section,
+    required this.teacherScheduleId,
+  });
+
+  @override
+  List<Object> get props => [
+        section,
+        teacherScheduleId,
+      ];
+}
+
+class OnPaginateTeacherStudentList extends StudentListEvent {
+  final String section;
+  final String teacherScheduleId;
+
+  const OnPaginateTeacherStudentList({
+    required this.section,
+    required this.teacherScheduleId,
+  });
+
+  @override
+  List<Object> get props => [
+        section,
+        teacherScheduleId,
+      ];
+}
+
+class GetStudentAttendanceTimeout extends StudentListEvent {
+  final String section;
+
+  const GetStudentAttendanceTimeout({
     required this.section,
   });
 
@@ -20,15 +52,18 @@ class OnGetTeacherStudentList extends StudentListEvent {
       ];
 }
 
-class OnPaginateTeacherStudentList extends StudentListEvent {
+class PostStudentAttendanceTimeout extends StudentListEvent {
   final String section;
+  final List<String> studentIds;
 
-  const OnPaginateTeacherStudentList({
+  const PostStudentAttendanceTimeout({
     required this.section,
+    required this.studentIds,
   });
 
   @override
   List<Object> get props => [
         section,
+        studentIds,
       ];
 }

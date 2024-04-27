@@ -12,6 +12,7 @@ class Student extends Equatable {
   final String gender;
   final String yearLevel;
   final String? profilePhoto;
+  final String pk;
 
   const Student({
     required this.user,
@@ -20,6 +21,7 @@ class Student extends Equatable {
     required this.age,
     required this.gender,
     required this.yearLevel,
+    required this.pk,
     this.profilePhoto,
   });
 
@@ -31,8 +33,10 @@ class Student extends Equatable {
     String? gender,
     String? yearLevel,
     String? profilePhoto,
+    String? pk,
   }) {
     return Student(
+      pk: pk ?? this.pk,
       user: user ?? this.user,
       address: address ?? this.address,
       contactNumber: contactNumber ?? this.contactNumber,
@@ -45,6 +49,7 @@ class Student extends Equatable {
 
   factory Student.fromMap(Map<String, dynamic> map) {
     return Student(
+      pk: map['pk'] ?? '',
       user: User.fromMap(map['user']),
       address: map['address'] ?? '',
       contactNumber: map['contact_number'] ?? '',

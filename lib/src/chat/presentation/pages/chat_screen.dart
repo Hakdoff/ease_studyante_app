@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:ease_studyante_app/core/bloc/bloc/global_bloc.dart';
 import 'package:ease_studyante_app/core/config/app_constant.dart';
-import 'package:ease_studyante_app/src/teacher/pages/chat/presentation/widgets/chat_bubble.dart';
-import 'package:ease_studyante_app/src/teacher/pages/chat/presentation/widgets/chat_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:web_socket_channel/io.dart';
@@ -12,6 +10,8 @@ import 'package:web_socket_channel/status.dart' as status;
 import 'package:ease_studyante_app/core/common_widget/custom_appbar.dart';
 import 'package:ease_studyante_app/core/enum/view_status.dart';
 import 'package:ease_studyante_app/src/chat/presentation/bloc/chat/chat_bloc.dart';
+import 'package:ease_studyante_app/src/teacher/pages/chat/presentation/widgets/chat_bubble.dart';
+import 'package:ease_studyante_app/src/teacher/pages/chat/presentation/widgets/chat_input.dart';
 import 'package:ease_studyante_app/src/teacher/pages/profile/domain/entities/teacher.dart';
 
 class ChatArgs {
@@ -163,6 +163,7 @@ class _ChatScreenState extends State<ChatScreen> {
         context.read<ChatBloc>().add(OnReceivedMessageChat(message: message));
       });
     } catch (e) {
+      // ignore: use_build_context_synchronously
       context
           .read<ChatBloc>()
           .add(const OnGetConnectWebSocket(isConnected: false));

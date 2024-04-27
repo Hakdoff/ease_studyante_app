@@ -2,7 +2,6 @@ import 'package:ease_studyante_app/core/bloc/bloc/global_bloc.dart';
 import 'package:ease_studyante_app/core/common_widget/spaced_column_widget.dart';
 
 import 'package:ease_studyante_app/core/enum/view_status.dart';
-import 'package:ease_studyante_app/core/resources/theme/theme.dart';
 import 'package:ease_studyante_app/core/common_widget/gpa_tile_widget.dart';
 import 'package:ease_studyante_app/gen/colors.gen.dart';
 import 'package:ease_studyante_app/src/assessment/domain/assessment_model.dart';
@@ -15,6 +14,7 @@ import 'package:ease_studyante_app/src/grades/presentation/pages/widgets/grading
 import 'package:ease_studyante_app/src/subject/domain/entities/subject_model.dart';
 import 'package:ease_studyante_app/src/subject/presentation/blocs/subject_detail/bloc/subject_detail_bloc.dart';
 import 'package:ease_studyante_app/src/teacher/pages/home/domain/entities/section.dart';
+import 'package:ease_studyante_app/src/teacher/pages/home/domain/entities/student.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
@@ -23,14 +23,18 @@ class SubjectDetailScreen extends StatefulWidget {
   final SubjectModel subject;
   final Section section;
   final bool isTeacher;
+  final bool isParent;
   final String studentId;
+  final Student? selectedStudent;
 
   const SubjectDetailScreen({
     super.key,
     required this.subject,
     required this.section,
     required this.isTeacher,
+    required this.isParent,
     required this.studentId,
+    this.selectedStudent,
   });
 
   @override
@@ -45,18 +49,9 @@ class _SubjectDetailScreenState extends State<SubjectDetailScreen> {
   @override
   void initState() {
     super.initState();
-
+    globalBloc = BlocProvider.of<GlobalBloc>(context);
     subjectDetailBloc = BlocProvider.of<SubjectDetailBloc>(context);
-    if (!widget.isTeacher) {
-      subjectDetailBloc.add(
-        GetAssessmentEvent(subjectId: widget.subject.id),
-      );
-      subjectDetailBloc.add(
-        GetStudentOverallGrade(
-          subjectId: widget.subject.id,
-        ),
-      );
-    } else {
+    if (widget.isTeacher) {
       subjectDetailBloc.add(
         GetAssessmentTeacherEvent(studentId: widget.studentId),
       );
@@ -64,6 +59,34 @@ class _SubjectDetailScreenState extends State<SubjectDetailScreen> {
         GetStudentTeacherOverallGrade(
           subjectId: widget.subject.id,
           studentId: widget.studentId,
+        ),
+      );
+    } else if (widget.isParent) {
+      subjectDetailBloc.add(
+        GetAssessmentEvent(
+          subjectId: widget.subject.id,
+          isParent: widget.isParent,
+          studentId: widget.studentId,
+        ),
+      );
+      subjectDetailBloc.add(
+        GetStudentOverallGrade(
+          subjectId: widget.subject.id,
+          isParent: widget.isParent,
+          studentId: widget.studentId,
+        ),
+      );
+    } else {
+      subjectDetailBloc.add(
+        GetAssessmentEvent(
+          subjectId: widget.subject.id,
+          isParent: widget.isParent,
+        ),
+      );
+      subjectDetailBloc.add(
+        GetStudentOverallGrade(
+          subjectId: widget.subject.id,
+          isParent: widget.isParent,
         ),
       );
     }
@@ -190,9 +213,15 @@ class _SubjectDetailScreenState extends State<SubjectDetailScreen> {
                       child: SpacedColumn(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Name: ${globalBloc.state.studentProfile.firstName} ${globalBloc.state.studentProfile.lastName}',
-                          ),
+                          if (widget.isParent || widget.isTeacher) ...[
+                            Text(
+                              'Name: ${widget.selectedStudent?.user.firstName} ${widget.selectedStudent?.user.lastName}',
+                            ),
+                          ] else ...[
+                            Text(
+                              'Name: ${globalBloc.state.studentProfile.firstName} ${globalBloc.state.studentProfile.lastName}',
+                            ),
+                          ],
                           Text(
                             'Section: ${widget.section.name}',
                           )
@@ -222,17 +251,30 @@ class _SubjectDetailScreenState extends State<SubjectDetailScreen> {
                                     RepositoryProvider.of<AttendanceRepository>(
                                         context),
                               ),
-                              child: AttendanceScreen(subject: widget.subject),
+                              child: widget.isParent
+                                  ? AttendanceScreen(
+                                      subject: widget.subject,
+                                      isParent: widget.isParent,
+                                      studentId: widget.studentId,
+                                    )
+                                  : AttendanceScreen(
+                                      subject: widget.subject,
+                                      isParent: widget.isParent,
+                                    ),
                             ),
                           ),
                         ),
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: ColorSchemes.bodyLabel,
+                      backgroundColor: ColorName.primary,
                     ),
                     child: const Text(
                       'View Attendance',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                   if (state.studentOverallGrade.isViewGrade) ...[

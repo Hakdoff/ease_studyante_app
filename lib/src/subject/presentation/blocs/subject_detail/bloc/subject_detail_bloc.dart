@@ -49,6 +49,8 @@ class SubjectDetailBloc extends Bloc<SubjectDetailEvent, SubjectDetailState> {
         final assessmentResponse = await assessmentRepository.getAssessment(
           gradingPeriod: element,
           subjectId: event.subjectId,
+          isParent: event.isParent,
+          studentId: event.studentId,
         );
 
         for (var element in assessmentResponse) {
@@ -82,6 +84,8 @@ class SubjectDetailBloc extends Bloc<SubjectDetailEvent, SubjectDetailState> {
     try {
       final gradeResponse = await assessmentRepository.getOverallGradeStudent(
         subjectId: event.subjectId,
+        isParent: event.isParent,
+        studentId: event.studentId,
       );
 
       emit(

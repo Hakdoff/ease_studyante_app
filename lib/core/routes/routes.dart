@@ -3,6 +3,8 @@ import 'package:ease_studyante_app/src/chat/data/repository/chat_repository_impl
 import 'package:ease_studyante_app/src/chat/presentation/bloc/chat/chat_bloc.dart';
 import 'package:ease_studyante_app/src/chat/presentation/pages/chat_screen.dart';
 import 'package:ease_studyante_app/src/landing/presentation/landing_page.dart';
+import 'package:ease_studyante_app/src/teacher/pages/attendance/data/repository/teacher_attendance_repository.dart';
+import 'package:ease_studyante_app/src/teacher/pages/attendance/data/repository/teacher_attendance_repository_impl.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/bloc/chat/teacher_chat_bloc.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/bloc/chat_list/teacher_chat_list_bloc.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/bloc/search_chat_list/search_teacher_chat_list_bloc.dart';
@@ -70,11 +72,19 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
     case StudentListPage.routeName:
       final args = settings.arguments! as StudentListArgs;
       return PageTransition(
-        child: RepositoryProvider<StudentListRepository>(
-          create: (context) => StudentListRepositoryImpl(),
+        child: MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider<StudentListRepository>(
+              create: (context) => StudentListRepositoryImpl(),
+            ),
+            RepositoryProvider<TeacherAttendanceRepository>(
+              create: (context) => TeacherAttendanceRepositoryImpl(),
+            ),
+          ],
           child: BlocProvider<StudentListBloc>(
             create: (context) => StudentListBloc(
               RepositoryProvider.of<StudentListRepository>(context),
+              RepositoryProvider.of<TeacherAttendanceRepository>(context),
             ),
             child: StudentListPage(
               args: args,
@@ -91,7 +101,8 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
 
       return PageTransition(
         child: StudentDetailPage(
-          args: args,
+          schedule: args.schedule,
+          student: args.student,
         ),
         duration: const Duration(milliseconds: 250),
         settings: settings,

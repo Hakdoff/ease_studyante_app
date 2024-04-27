@@ -35,8 +35,11 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     );
 
     try {
-      final response =
-          await attendanceRepository.getStudentAttendance(event.subject.id);
+      final response = await attendanceRepository.getStudentAttendance(
+        subjectId: event.subject.id,
+        isParent: event.isParent,
+        studentId: event.studentId,
+      );
       final List<StudentAttendanceModel> finalList = [];
       for (var element in response) {
         if (element.schedule.subject.code == event.subject.code) {

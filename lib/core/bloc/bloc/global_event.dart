@@ -15,3 +15,10 @@ class StoreStudentSectionEvent extends GlobalEvent {
   @override
   List<Object?> get props => [section];
 }
+
+class StoreStudentScheduleEvent extends GlobalEvent {
+  final List<ScheduleModel> schedule;
+  StoreStudentScheduleEvent({required this.schedule});
+  @override
+  List<Object?> get props => [schedule];
+}

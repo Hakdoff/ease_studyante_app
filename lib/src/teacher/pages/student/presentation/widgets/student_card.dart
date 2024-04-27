@@ -4,7 +4,7 @@ import 'package:ease_studyante_app/src/teacher/pages/home/domain/entities/studen
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class StudentCard extends StatelessWidget {
+class StudentCard extends StatefulWidget {
   const StudentCard({
     super.key,
     required this.student,
@@ -15,9 +15,14 @@ class StudentCard extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
+  State<StudentCard> createState() => _StudentCardState();
+}
+
+class _StudentCardState extends State<StudentCard> {
+  @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
         child: Card(
@@ -32,8 +37,9 @@ class StudentCard extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           backgroundColor: ColorName.primary,
-                          backgroundImage: student.profilePhoto != null
-                              ? Image.network(student.profilePhoto!).image
+                          backgroundImage: widget.student.profilePhoto != null
+                              ? Image.network(widget.student.profilePhoto!)
+                                  .image
                               : null,
                           radius: 20,
                           child: const Icon(
@@ -45,7 +51,7 @@ class StudentCard extends StatelessWidget {
                         const Gap(10),
                         CustomText(
                           text:
-                              '${student.user.lastName}, ${student.user.firstName}',
+                              '${widget.student.user.lastName}, ${widget.student.user.firstName}',
                         )
                       ],
                     ),

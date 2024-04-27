@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:ease_studyante_app/src/teacher/pages/home/domain/entities/student.dart';
+
 class Profile {
   final String pk;
   final String username;
@@ -10,6 +12,7 @@ class Profile {
   final String? profilePhoto;
   final String gender;
   final bool isNewUser;
+  final List<Student>? students;
 
   Profile({
     required this.pk,
@@ -21,6 +24,7 @@ class Profile {
     required this.gender,
     required this.isNewUser,
     this.profilePhoto,
+    this.students,
   });
 
   factory Profile.empty() {
@@ -33,6 +37,7 @@ class Profile {
       profilePk: '',
       gender: '',
       isNewUser: false,
+      students: [],
     );
   }
 
@@ -75,6 +80,19 @@ class Profile {
   }
 
   factory Profile.fromMap(Map<String, dynamic> map) {
+    final studentList = map['students'];
+    List<Student> parsedStudents = [];
+    if (studentList != null) {
+      if (studentList.isNotEmpty) {
+        for (var element in studentList) {
+          final response = Student.fromMap(
+            element as Map<String, dynamic>,
+          );
+          parsedStudents.add(response);
+        }
+      }
+    }
+
     return Profile(
       pk: map['pk'] as String,
       username: map['username'] as String,
@@ -82,10 +100,10 @@ class Profile {
       lastName: map['lastName'] as String,
       email: map['email'] as String,
       profilePk: map['profilePk'] as String,
-      profilePhoto:
-          map['profilePhoto'] != null ? map['profilePhoto'] as String : null,
-      gender: map['gender'] as String,
+      profilePhoto: map['profilePhoto'] ?? '',
+      gender: map['gender'] ?? '',
       isNewUser: map['is_new_user'] as bool,
+      students: parsedStudents,
     );
   }
 

@@ -4,13 +4,21 @@ sealed class SubjectDetailEvent extends Equatable {}
 
 class GetAssessmentEvent extends SubjectDetailEvent {
   final String subjectId;
+  final bool isParent;
+  final String? studentId;
 
   GetAssessmentEvent({
     required this.subjectId,
+    required this.isParent,
+    this.studentId,
   });
 
   @override
-  List<Object?> get props => [subjectId];
+  List<Object?> get props => [
+        subjectId,
+        isParent,
+        studentId,
+      ];
 }
 
 class GetAssessmentTeacherEvent extends SubjectDetailEvent {
@@ -26,13 +34,21 @@ class GetAssessmentTeacherEvent extends SubjectDetailEvent {
 
 class GetStudentOverallGrade extends SubjectDetailEvent {
   final String subjectId;
+  final bool isParent;
+  final String? studentId;
 
   GetStudentOverallGrade({
     required this.subjectId,
+    required this.isParent,
+    this.studentId,
   });
 
   @override
-  List<Object?> get props => [subjectId];
+  List<Object?> get props => [
+        subjectId,
+        isParent,
+        studentId,
+      ];
 }
 
 class GetStudentTeacherOverallGrade extends SubjectDetailEvent {

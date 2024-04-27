@@ -24,22 +24,28 @@ class StudentListError extends StudentListState {
 
 class StudentListLoading extends StudentListState {}
 
+class PostStudentTimeOutSuccessState extends StudentListState {}
+
 class StudentListLoaded extends StudentListState {
   final StudentListResponseModel studentList;
+  final List<AttendanceTimeOutModel> studentTimeOut;
   final bool isPaginate;
 
   const StudentListLoaded({
     required this.studentList,
+    required this.studentTimeOut,
     this.isPaginate = false,
   });
 
   StudentListLoaded copyWith({
     StudentListResponseModel? studentList,
     bool? isPaginate,
+    List<AttendanceTimeOutModel>? studentTimeOut,
   }) {
     return StudentListLoaded(
       studentList: studentList ?? this.studentList,
       isPaginate: isPaginate ?? this.isPaginate,
+      studentTimeOut: studentTimeOut ?? this.studentTimeOut,
     );
   }
 

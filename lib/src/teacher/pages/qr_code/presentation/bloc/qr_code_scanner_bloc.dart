@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:ease_studyante_app/src/teacher/pages/home/domain/entities/attendance.dart';
 import 'package:ease_studyante_app/src/teacher/pages/qr_code/domain/repositories/qr_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -22,14 +23,20 @@ class QrCodeScannerBloc extends Bloc<QrCodeScannerEvent, QrCodeScannerState> {
     if (state is! QrCodeScannerLoading) {
       emit(QrCodeScannerLoading());
 
-      final response = await repository.qrScanStudent(event.id);
+      try {
+        final response = await repository.qrScanStudent(event.id);
 
-      emit(
-        QrCodeScannerLoaded(
-          attendance: response.attendance,
-          errorMessage: response.errorMessage,
-        ),
-      );
+        emit(
+          QrCodeScannerLoaded(
+            attendance: response.attendance,
+            errorMessage: response.errorMessage,
+          ),
+        );
+      } catch (e) {
+        final error = e as DioException;
+        final response = error.response?.data['error_message'];
+        emit(QrCodeErrorState(errorMessage: response));
+      }
     }
   }
 }

@@ -9,10 +9,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AttendanceScreen extends StatefulWidget {
   final SubjectModel subject;
+  final bool isParent;
+  final String? studentId;
 
   const AttendanceScreen({
     super.key,
     required this.subject,
+    required this.isParent,
+    this.studentId,
   });
 
   @override
@@ -28,7 +32,22 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     super.initState();
     attendanceBloc = BlocProvider.of<AttendanceBloc>(context);
     globalBloc = BlocProvider.of<GlobalBloc>(context);
-    attendanceBloc.add(GetStudentAttendanceEvent(subject: widget.subject));
+    if (widget.isParent) {
+      attendanceBloc.add(
+        GetStudentAttendanceEvent(
+          subject: widget.subject,
+          isParent: widget.isParent,
+          studentId: widget.studentId,
+        ),
+      );
+    } else {
+      attendanceBloc.add(
+        GetStudentAttendanceEvent(
+          subject: widget.subject,
+          isParent: widget.isParent,
+        ),
+      );
+    }
   }
 
   @override

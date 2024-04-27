@@ -23,3 +23,5 @@ class SetProfileLogoutEvent extends ProfileEvent {}
 class OnGetProfileEvent extends ProfileEvent {}
 
 class OnGetStudentProfileEvent extends ProfileEvent {}
+
+class OnGetParentProfileEvent extends ProfileEvent {}

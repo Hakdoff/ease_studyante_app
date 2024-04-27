@@ -33,7 +33,10 @@ class SubjectBloc extends Bloc<SubjectEvent, SubjectState> {
     );
 
     try {
-      final response = await scheduleRepository.getStudentSchedule();
+      final response = await scheduleRepository.getStudentSchedule(
+        isParent: event.isParent,
+        studentId: event.studentId,
+      );
 
       emit(
         state.copyWith(

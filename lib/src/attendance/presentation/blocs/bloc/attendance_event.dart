@@ -4,7 +4,17 @@ sealed class AttendanceEvent extends Equatable {}
 
 class GetStudentAttendanceEvent extends AttendanceEvent {
   final SubjectModel subject;
-  GetStudentAttendanceEvent({required this.subject});
+  final bool isParent;
+  final String? studentId;
+  GetStudentAttendanceEvent({
+    required this.subject,
+    required this.isParent,
+    this.studentId,
+  });
   @override
-  List<Object?> get props => [subject];
+  List<Object?> get props => [
+        subject,
+        isParent,
+        studentId,
+      ];
 }

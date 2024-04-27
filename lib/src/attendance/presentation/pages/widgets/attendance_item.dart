@@ -13,20 +13,55 @@ class AttendanceItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formattedDate = DateFormat.yMMMMd('en_US').format(
-      DateTime.parse(
-        studentAttendance.timeIn,
-      ),
-    );
-    final formattedTime = DateFormat.Hms().format(
-      DateTime.parse(
-        studentAttendance.timeIn,
-      ),
-    );
-    final status = studentAttendance.isPresent ? 'Present' : 'Tardy';
+    String formattedDate = '';
+    String formattedTimeIn = '';
+    String formattedTimeOut = '';
+    final timeIn = studentAttendance.timeIn;
+    final timeOut = studentAttendance.timeOut;
+
+    if (timeIn != null) {
+      formattedDate = DateFormat.yMMMMd('en_US').format(
+        DateTime.parse(
+          timeIn,
+        ),
+      );
+
+      formattedTimeIn = DateFormat.jm().format(
+        DateTime.parse(
+          timeIn,
+        ).add(
+          const Duration(
+            hours: 8,
+          ),
+        ),
+      );
+    }
+
+    if (timeOut != null) {
+      formattedDate = DateFormat.yMMMMd('en_US').format(
+        DateTime.parse(
+          timeOut,
+        ),
+      );
+
+      formattedTimeOut = DateFormat.jm().format(
+        DateTime.parse(
+          timeOut,
+        ).add(
+          const Duration(
+            hours: 8,
+          ),
+        ),
+      );
+    }
+
+    final status = studentAttendance.timeIn == null
+        ? "Absent"
+        : studentAttendance.isPresent
+            ? 'Present'
+            : 'Tardy';
     final statusColor =
         status != 'Present' ? Colors.red[400] : Colors.green[400];
-    final schedule = studentAttendance.schedule;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -56,34 +91,11 @@ class AttendanceItemWidget extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                'Date: $formattedDate',
+                'Date: ${studentAttendance.attendanceDate}',
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 12,
                 ),
-              ),
-            ],
-          ),
-          SpacedRow(
-            children: [
-              Row(
-                children: [
-                  const Text(
-                    'Subject: ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                    ),
-                  ),
-                  Text(
-                    schedule.subject
-                        .name, // Accessing the name property of the subject
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
               ),
             ],
           ),
@@ -109,13 +121,39 @@ class AttendanceItemWidget extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              Text(
-                'Time In: $formattedTime',
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
+              SpacedColumn(
+                children: [
+                  if (timeIn != null) ...[
+                    Text(
+                      'Time In: $formattedTimeIn',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                  Row(
+                    children: [
+                      const Text(
+                        'Time Out:',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                        ),
+                      ),
+                      if (timeOut != null) ...[
+                        Text(
+                          ' $formattedTimeOut',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ],
+                  )
+                ],
+              )
             ],
           ),
         ],

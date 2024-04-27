@@ -27,7 +27,6 @@ class LoginBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.44,
       child: Padding(
         padding: const EdgeInsets.only(
           top: 50,
@@ -70,6 +69,7 @@ class LoginBody extends StatelessWidget {
                   label: 'Login',
                   onTap: onSubmit,
                   style: const TextStyle(
+                    color: Colors.white,
                     fontWeight: FontWeight.w600,
                   ),
                   btnStyle: ElevatedButton.styleFrom(

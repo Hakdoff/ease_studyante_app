@@ -11,11 +11,20 @@ class AssessmentRepositoryImpl extends AssessmentRepository {
   Future<List<AssessmentModel>> getAssessment({
     required GradingPeriod gradingPeriod,
     required String subjectId,
+    required bool isParent,
+    String? studentId,
   }) async {
     final gradingPeriodParsed =
         gradingPeriod.toString().replaceAll('GradingPeriod.', '');
-    String url =
-        '${AppConstant.apiUrl}/student/assessments?grading_period=$gradingPeriodParsed&subject_id=$subjectId&limit=100';
+
+    String url = '';
+    if (isParent) {
+      url =
+          '${AppConstant.apiUrl}/student/assessments?grading_period=$gradingPeriodParsed&subject_id=$subjectId&student_id=$studentId';
+    } else {
+      url =
+          '${AppConstant.apiUrl}/student/assessments?grading_period=$gradingPeriodParsed&subject_id=$subjectId&limit=100';
+    }
 
     return await ApiInterceptor.apiInstance().get(url).then(
       (value) {
@@ -54,9 +63,18 @@ class AssessmentRepositoryImpl extends AssessmentRepository {
   }
 
   @override
-  Future<StudentOverallGradeModel> getOverallGradeStudent(
-      {required String subjectId}) async {
-    String url = '${AppConstant.apiUrl}/student/over-all?subject_id=$subjectId';
+  Future<StudentOverallGradeModel> getOverallGradeStudent({
+    required String subjectId,
+    required bool isParent,
+    String? studentId,
+  }) async {
+    String url = '';
+    if (isParent) {
+      url =
+          '${AppConstant.apiUrl}/student/over-all?subject_id=$subjectId&student_id=$studentId';
+    } else {
+      url = '${AppConstant.apiUrl}/student/over-all?subject_id=$subjectId';
+    }
 
     return await ApiInterceptor.apiInstance().get(url).then(
       (value) {

@@ -7,7 +7,7 @@ import 'package:ease_studyante_app/src/teacher/bloc/teacher_bloc.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/bloc/chat/teacher_chat_bloc.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/presentation/widgets/chat_bubble.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/presentation/widgets/chat_input.dart';
-import 'package:ease_studyante_app/src/teacher/pages/home/domain/entities/student.dart';
+import 'package:ease_studyante_app/src/teacher/pages/home/domain/entities/user.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/io.dart';
@@ -15,11 +15,11 @@ import 'package:web_socket_channel/io.dart';
 import 'package:flutter/material.dart';
 
 class TeacherChatArgs {
-  final Student student;
+  final User user;
   final String rooName;
 
   TeacherChatArgs({
-    required this.student,
+    required this.user,
     required this.rooName,
   });
 }
@@ -67,8 +67,7 @@ class _TeacherChatScreenState extends State<TeacherChatScreen> {
     return Scaffold(
       appBar: buildAppBar(
           context: context,
-          title:
-              '${widget.args.student.user.firstName} ${widget.args.student.user.lastName}'),
+          title: '${widget.args.user.firstName} ${widget.args.user.lastName}'),
       body: BlocBuilder<TeacherChatBloc, TeacherChatState>(
         builder: (context, state) {
           if (state.viewStatus == ViewStatus.loading) {
@@ -177,6 +176,7 @@ class _TeacherChatScreenState extends State<TeacherChatScreen> {
             .add(OnReceivedMessageChat(message: message));
       });
     } catch (e) {
+      // ignore: use_build_context_synchronously
       context
           .read<TeacherChatBloc>()
           .add(const OnGetConnectWebSocket(isConnected: false));

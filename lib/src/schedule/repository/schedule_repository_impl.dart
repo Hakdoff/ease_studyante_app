@@ -8,8 +8,16 @@ class ScheduleRepositoryImpl extends ScheduleRepository {
   final Dio dio = Dio();
 
   @override
-  Future<List<ScheduleModel>> getStudentSchedule() async {
-    String url = '${AppConstant.apiUrl}/student/schedule';
+  Future<List<ScheduleModel>> getStudentSchedule({
+    required bool isParent,
+    String? studentId,
+  }) async {
+    String url = '';
+    if (isParent) {
+      url = '${AppConstant.apiUrl}/student/schedule?student_id=$studentId';
+    } else {
+      url = '${AppConstant.apiUrl}/student/schedule';
+    }
 
     return await ApiInterceptor.apiInstance().get(url).then((value) {
       final result = value.data['results'] as List;

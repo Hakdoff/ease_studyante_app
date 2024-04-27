@@ -7,6 +7,7 @@ import 'package:ease_studyante_app/src/subject/domain/entities/subject_model.dar
 import 'package:ease_studyante_app/src/subject/presentation/blocs/subject_detail/bloc/subject_detail_bloc.dart';
 import 'package:ease_studyante_app/src/subject/presentation/pages/subject_detail_screen.dart';
 import 'package:ease_studyante_app/src/teacher/pages/home/domain/entities/section.dart';
+import 'package:ease_studyante_app/src/teacher/pages/home/domain/entities/student.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
@@ -15,18 +16,25 @@ class SubjectItemWidget extends StatelessWidget {
   final SubjectModel subject;
   final Section section;
   final ScheduleModel schedule;
+  final bool isParent;
+  final Student? selectedStudent;
+  final Function()? onStudentSubjectTapped;
 
   const SubjectItemWidget({
     super.key,
     required this.subject,
     required this.section,
     required this.schedule,
+    required this.isParent,
+    this.selectedStudent,
+    this.onStudentSubjectTapped,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        onStudentSubjectTapped!();
         Navigator.push(
           context,
           PageTransition(
@@ -43,7 +51,9 @@ class SubjectItemWidget extends StatelessWidget {
                   subject: subject,
                   section: section,
                   isTeacher: false,
-                  studentId: '',
+                  studentId: selectedStudent?.pk ?? '',
+                  isParent: isParent,
+                  selectedStudent: selectedStudent,
                 ),
               ),
             ),
@@ -80,6 +90,9 @@ class SubjectItemWidget extends StatelessWidget {
               ),
               CustomText(
                 text: '${section.yearLevel} - ${section.name}',
+              ),
+              CustomText(
+                text: schedule.days,
               ),
               CustomText(
                 text:

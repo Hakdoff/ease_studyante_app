@@ -10,6 +10,7 @@ class Teacher extends Equatable {
   final String email;
   final String department;
   final String? profilePhoto;
+  final bool isNewUser;
 
   const Teacher({
     required this.pk,
@@ -18,6 +19,7 @@ class Teacher extends Equatable {
     required this.lastName,
     required this.email,
     required this.department,
+    required this.isNewUser,
     this.profilePhoto,
   });
 
@@ -29,6 +31,7 @@ class Teacher extends Equatable {
     String? email,
     String? department,
     String? profilePhoto,
+    bool? isNewUser,
   }) {
     return Teacher(
       pk: pk ?? this.pk,
@@ -38,6 +41,7 @@ class Teacher extends Equatable {
       email: email ?? this.email,
       department: department ?? this.department,
       profilePhoto: profilePhoto ?? this.profilePhoto,
+      isNewUser: isNewUser ?? this.isNewUser,
     );
   }
 
@@ -66,6 +70,7 @@ class Teacher extends Equatable {
       email: map['email'] ?? '',
       department: map['department'] ?? '',
       profilePhoto: map['profilePhoto'],
+      isNewUser: map['is_new_user'] ?? false,
     );
   }
 
@@ -78,6 +83,7 @@ class Teacher extends Equatable {
       email: map['user']['email'] ?? '',
       department: map['department'] ?? '',
       profilePhoto: map['profilePhoto'],
+      isNewUser: map['is_new_user'] ?? false,
     );
   }
 

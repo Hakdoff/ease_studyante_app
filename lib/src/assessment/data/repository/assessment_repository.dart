@@ -6,6 +6,8 @@ abstract class AssessmentRepository {
   Future<List<AssessmentModel>> getAssessment({
     required GradingPeriod gradingPeriod,
     required String subjectId,
+    required bool isParent,
+    String? studentId,
   });
 
   Future<List<AssessmentModel>> getAssessmentTeacher({
@@ -15,6 +17,8 @@ abstract class AssessmentRepository {
 
   Future<StudentOverallGradeModel> getOverallGradeStudent({
     required String subjectId,
+    required bool isParent,
+    String? studentId,
   });
 
   Future<StudentOverallGradeModel> getOverallGradeStudentTeacher({

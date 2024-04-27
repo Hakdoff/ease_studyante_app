@@ -1,23 +1,24 @@
 part of 'search_teacher_chat_list_bloc.dart';
 
 class SearchTeacherChatListState extends Equatable {
-  final StudentListResponseModel studentList;
+  final UserListResponseModel userListResponseModel;
   final ViewStatus viewStatus;
   final String? errorMessage;
 
   const SearchTeacherChatListState({
-    required this.studentList,
+    required this.userListResponseModel,
     this.viewStatus = ViewStatus.none,
     this.errorMessage,
   });
 
   SearchTeacherChatListState copyWith({
-    StudentListResponseModel? studentList,
+    UserListResponseModel? userListResponseModel,
     ViewStatus? viewStatus,
     String? errorMessage,
   }) {
     return SearchTeacherChatListState(
-      studentList: studentList ?? this.studentList,
+      userListResponseModel:
+          userListResponseModel ?? this.userListResponseModel,
       viewStatus: viewStatus ?? this.viewStatus,
       errorMessage: errorMessage ?? this.errorMessage,
     );
@@ -25,12 +26,12 @@ class SearchTeacherChatListState extends Equatable {
 
   @override
   List<Object?> get props => [
-        studentList,
+        userListResponseModel,
         viewStatus,
         errorMessage,
       ];
 }
 
 final class SearchTeacherChatListInitial extends SearchTeacherChatListState {
-  const SearchTeacherChatListInitial({required super.studentList});
+  const SearchTeacherChatListInitial({required super.userListResponseModel});
 }

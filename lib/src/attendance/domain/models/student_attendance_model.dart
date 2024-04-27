@@ -5,7 +5,7 @@ import 'package:ease_studyante_app/src/teacher/pages/home/domain/entities/studen
 
 class StudentAttendanceModel {
   final String id;
-  final String timeIn;
+  final String? timeIn;
   final String? timeOut;
   final bool isPresent;
   final String attendanceDate;
@@ -25,7 +25,7 @@ class StudentAttendanceModel {
   factory StudentAttendanceModel.fromMap(Map<String, dynamic> map) {
     return StudentAttendanceModel(
       id: map['id'] as String,
-      timeIn: map['time_in'] as String,
+      timeIn: map['time_in'] as String?,
       timeOut: map['time_out'] as String?,
       isPresent: map['is_present'] as bool,
       attendanceDate: map['attendance_date'] as String,

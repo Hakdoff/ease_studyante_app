@@ -29,10 +29,12 @@ import 'widgets/login_header.dart';
 class LoginArgs {
   final bool isTeacher;
   final bool isStudent;
+  final bool isParent;
 
   LoginArgs({
     required this.isTeacher,
     required this.isStudent,
+    required this.isParent,
   });
 }
 
@@ -61,6 +63,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    // emailCtrl.text = 'denparent@deped.com';
+    // passwordCtrl.text = 'asd000!!';
     final profileRepository = ProfileRepositoryImpl();
     loginBloc = LoginBloc(
       LoginRepositoryImpl(),
@@ -81,6 +85,7 @@ class _LoginPageState extends State<LoginPage> {
               profile: state.profile,
             ),
           );
+          handleNAvigate();
         }
       },
       child: BlocProvider(
@@ -92,7 +97,14 @@ class _LoginPageState extends State<LoginPage> {
           body: ProgressHUD(
             child: Builder(builder: (context) {
               final progressHUD = ProgressHUD.of(context);
-
+              String user = '';
+              if (widget.args.isTeacher) {
+                user = 'Teacher';
+              } else if (widget.args.isParent) {
+                user = 'Parent';
+              } else if (widget.args.isStudent) {
+                user = 'Student';
+              }
               return BlocListener<LoginBloc, LoginState>(
                 listener: (context, state) {
                   if (state is LoginLoading) {
@@ -115,8 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     children: [
                       LoginHeader(
-                        title:
-                            'Login ${widget.args.isTeacher ? 'Teacher' : 'Student/Parent'}',
+                        title: 'Login $user',
                       ),
                       const Gap(15),
                       LoginBody(
@@ -150,15 +161,13 @@ class _LoginPageState extends State<LoginPage> {
 
   void handleSubmit() {
     if (_formKey.currentState!.validate()) {
-      // Add student support !widget.args.isTeacher
-      // add checkbox for parent?
-
       loginBloc.add(
         OnSubmitLoginEvent(
           emailAddress: emailCtrl.value.text,
           password: passwordCtrl.value.text,
           isTeacher: widget.args.isTeacher,
           isStudent: widget.args.isStudent,
+          isParent: widget.args.isParent,
         ),
       );
     }
@@ -184,45 +193,53 @@ class _LoginPageState extends State<LoginPage> {
         ),
         ModalRoute.withName('/'),
       );
-    } else {
+    } else if (widget.args.isStudent) {
       profileBloc.add(OnGetStudentProfileEvent());
-      Navigator.pushAndRemoveUntil<void>(
-        context,
-        MaterialPageRoute<void>(
-          builder: (BuildContext context) => MultiRepositoryProvider(
-              providers: [
-                RepositoryProvider<ScheduleRepository>(
-                  create: (context) => ScheduleRepositoryImpl(),
-                ),
-                RepositoryProvider<ChatListRepository>(
-                  create: (context) => ChatListRepositoryImpl(),
-                ),
-              ],
-              child: MultiBlocProvider(
-                providers: [
-                  BlocProvider<SubjectBloc>(
-                    create: (context) => SubjectBloc(
-                      scheduleRepository:
-                          RepositoryProvider.of<ScheduleRepository>(context),
-                    ),
-                  ),
-                  BlocProvider<ChatListBloc>(
-                    create: (context) => ChatListBloc(
-                      RepositoryProvider.of<ChatListRepository>(context),
-                    ),
-                  ),
-                  BlocProvider<ChatBloc>(
-                    create: (context) => ChatBloc(
-                      RepositoryProvider.of<ChatRepository>(context),
-                    ),
-                  )
-                ],
-                child: const StudentHome(),
-              )),
-        ),
-        ModalRoute.withName('/'),
-      );
+    } else if (widget.args.isParent) {
+      profileBloc.add(OnGetParentProfileEvent());
     }
     // return student view home
+  }
+
+  void handleNAvigate() {
+    Navigator.pushAndRemoveUntil<void>(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider<ScheduleRepository>(
+              create: (context) => ScheduleRepositoryImpl(),
+            ),
+            RepositoryProvider<ChatListRepository>(
+              create: (context) => ChatListRepositoryImpl(),
+            ),
+          ],
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<SubjectBloc>(
+                create: (context) => SubjectBloc(
+                  scheduleRepository:
+                      RepositoryProvider.of<ScheduleRepository>(context),
+                ),
+              ),
+              BlocProvider<ChatListBloc>(
+                create: (context) => ChatListBloc(
+                  RepositoryProvider.of<ChatListRepository>(context),
+                ),
+              ),
+              BlocProvider<ChatBloc>(
+                create: (context) => ChatBloc(
+                  RepositoryProvider.of<ChatRepository>(context),
+                ),
+              )
+            ],
+            child: StudentHome(
+              isParent: widget.args.isParent,
+            ),
+          ),
+        ),
+      ),
+      ModalRoute.withName('/'),
+    );
   }
 }
