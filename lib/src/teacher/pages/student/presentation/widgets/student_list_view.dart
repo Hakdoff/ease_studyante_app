@@ -145,7 +145,6 @@ class _StudentListViewState extends State<StudentListView> {
                                   studentIds: finalList,
                                 ),
                               );
-                              print(finalList);
                             }
                           : null,
                     ),

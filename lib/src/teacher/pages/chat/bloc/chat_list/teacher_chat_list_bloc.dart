@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:ease_studyante_app/core/enum/view_status.dart';
+import 'package:ease_studyante_app/src/teacher/pages/chat/data/models/chat_session_model.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/data/models/user_model.dart';
 import 'package:ease_studyante_app/src/teacher/pages/chat/domain/repositories/teacher_chat_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -14,9 +15,38 @@ class TeacherChatListBloc
   final TeacherChatRepository _repository;
   TeacherChatListBloc(this._repository)
       : super(TeacherChatListInitial(
-            userListResponseModel: UserListResponseModel.empty())) {
+            userListResponseModel: UserListResponseModel.empty(),
+            chatSessionModel: ChatSessionModel.empty())) {
     on<OnSearchStudentEvent>(_onSearchStudentEvent);
     on<OnPaginateSearchStudentEventt>(_onPaginateSearchStudentEventt);
+    on<OnGetChatList>(_onGetChatList);
+  }
+
+  FutureOr<void> _onGetChatList(
+    OnGetChatList event,
+    Emitter<TeacherChatListState> emit,
+  ) async {
+    try {
+      emit(
+        state.copyWith(viewStatus: ViewStatus.loading),
+      );
+
+      final response = await _repository.getChatList();
+
+      emit(
+        state.copyWith(
+          chatSessionModel: response,
+          viewStatus: ViewStatus.successful,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          viewStatus: ViewStatus.failed,
+          errorMessage: 'Something went wrong',
+        ),
+      );
+    }
   }
 
   FutureOr<void> _onSearchStudentEvent(

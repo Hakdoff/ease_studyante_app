@@ -7,6 +7,8 @@ abstract class TeacherChatListEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class OnGetChatList extends TeacherChatListEvent {}
+
 class OnSearchStudentEvent extends TeacherChatListEvent {
   final String q;
 

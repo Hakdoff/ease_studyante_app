@@ -29,9 +29,9 @@ class ChatModel extends Equatable {
 
   factory ChatModel.fromMap(Map<String, dynamic> map) {
     return ChatModel(
-      nextPage: map['nextPage'],
-      totalCount: map['totalCount']?.toInt() ?? 0,
-      chats: List<Chat>.from(map['chats']?.map((x) => Chat.fromMap(x))),
+      nextPage: map['next_page'],
+      totalCount: map['count']?.toInt() ?? 0,
+      chats: List<Chat>.from(map['results']?.map((x) => Chat.fromMap(x))),
     );
   }
 

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:ease_studyante_app/core/bloc/bloc/global_bloc.dart';
 import 'package:ease_studyante_app/core/config/app_constant.dart';
+import 'package:ease_studyante_app/src/teacher/pages/chat/domain/entities/chat_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:web_socket_channel/io.dart';
@@ -17,10 +18,12 @@ import 'package:ease_studyante_app/src/teacher/pages/profile/domain/entities/tea
 class ChatArgs {
   final Teacher teacher;
   final String rooName;
+  final ChatSession? chatSession;
 
   ChatArgs({
     required this.teacher,
     required this.rooName,
+    this.chatSession,
   });
 }
 
@@ -43,13 +46,25 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController textEditingController = TextEditingController();
   ValueNotifier<bool> isDisabled = ValueNotifier(true);
   late GlobalBloc globalBloc;
+  ChatSession? chatSession;
+  final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-
-    context.read<ChatBloc>().add(OnGetInitialChat());
     globalBloc = context.read<GlobalBloc>();
+
+    final person = globalBloc.state.studentProfile.pk;
+
+    chatSession = widget.args.chatSession;
+    context.read<ChatBloc>().add(
+          OnGetInitialChat(
+            roomName: widget.args.rooName,
+            personId: person,
+            teacherId: widget.args.teacher.pk,
+            chatSession: chatSession,
+          ),
+        );
     // initialize websocket channel
     initChannel();
 
@@ -71,7 +86,14 @@ class _ChatScreenState extends State<ChatScreen> {
           context: context,
           title:
               '${widget.args.teacher.firstName} ${widget.args.teacher.lastName}'),
-      body: BlocBuilder<ChatBloc, ChatState>(
+      body: BlocConsumer<ChatBloc, ChatState>(
+        listener: (context, state) {
+          if (state.chatSession != null) {
+            setState(() {
+              chatSession = state.chatSession;
+            });
+          }
+        },
         builder: (context, state) {
           if (state.viewStatus == ViewStatus.loading) {
             return const Center(
@@ -95,8 +117,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       final chat = state.chatModel.chats[index];
 
                       return ChatBubble(
-                        isSender: globalBloc.state.studentProfile.email ==
-                            chat.username,
+                        isSender: !(globalBloc.state.studentProfile.email ==
+                            chat.username),
                         message: chat.message,
                         timeStamp: chat.timeStamp,
                       );
@@ -127,12 +149,11 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> onSendChatMessage(String message) async {
-    if (message.isNotEmpty) {
-      final userEmail = globalBloc.state.studentProfile.email;
-
+    if (message.isNotEmpty && chatSession != null) {
       final Map<String, dynamic> data = {
         "message": message,
-        "username": userEmail,
+        "username": widget.args.teacher.email,
+        "id": chatSession!.id
       };
       channel.sink.add(json.encode(data));
       textEditingController.clear();

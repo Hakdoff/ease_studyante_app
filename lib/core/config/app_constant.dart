@@ -25,7 +25,6 @@ class AppConstant {
       'V3UXqzMseJw6xifMThX2AgGIJasgYm0FLa5fXuqR8frGObuC3t4PfZp1sT8L0zccW4MKQ5akft7fjQMFeLyufyEviFHVaJN49HdjH3rb8Kng0QwvfKnhPiW04bYioOkn';
   static const serverUrl = 'https://easestudyante.onrender.com';
   static const serverHost = 'easestudyante.onrender.com';
-
   static const apiUrl = '$serverUrl/api';
   static const apiUser = '$serverUrl/user';
 }

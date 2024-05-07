@@ -117,6 +117,7 @@ class _TeacherSearchChatListScreenState
                                   args: TeacherChatArgs(
                                     rooName: roomName,
                                     user: user,
+                                    teacherId: teacherId,
                                   ),
                                 ),
                               ),

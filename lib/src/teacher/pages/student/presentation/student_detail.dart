@@ -192,7 +192,7 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
                                           ),
                                         );
                                       } catch (e) {
-                                        print(e);
+                                        // handle something went wrong
                                       }
                                       Navigator.pop(context);
                                     },

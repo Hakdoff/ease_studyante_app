@@ -27,7 +27,7 @@ class _TeacherChatListScreenState extends State<TeacherChatListScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<TeacherChatListBloc>().add(const OnSearchStudentEvent(' '));
+    context.read<TeacherChatListBloc>().add(OnGetChatList());
     handleEventScrollListener();
   }
 
@@ -66,19 +66,19 @@ class _TeacherChatListScreenState extends State<TeacherChatListScreen> {
 
               return ListView.separated(
                 shrinkWrap: true,
-                itemCount: state.userListResponseModel.users.length,
+                itemCount: state.chatSessionModel.chatSessions.length,
                 itemBuilder: (context, index) {
-                  final user = state.userListResponseModel.users[index];
+                  final chatSession =
+                      state.chatSessionModel.chatSessions[index];
                   // ROOM_NAME student + teacher ids
                   return ChatTile(
-                    id: user.pk,
-                    name: '${user.firstName} ${user.lastName}',
+                    id: chatSession.person.pk,
+                    name:
+                        '${chatSession.person.firstName} ${chatSession.person.lastName}',
                     onTap: () {
                       final teacherId = getCurrentUserId();
 
                       if (teacherId.isNotEmpty) {
-                        final roomName = user.pk + teacherId;
-
                         Navigator.push(
                           context,
                           PageTransition(
@@ -91,8 +91,9 @@ class _TeacherChatListScreenState extends State<TeacherChatListScreen> {
                                 ),
                                 child: TeacherChatScreen(
                                   args: TeacherChatArgs(
-                                    rooName: roomName,
-                                    user: user,
+                                    rooName: chatSession.roomName,
+                                    user: chatSession.person,
+                                    teacherId: teacherId,
                                   ),
                                 ),
                               ),

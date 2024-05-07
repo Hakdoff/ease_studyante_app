@@ -26,10 +26,15 @@ class Chat extends Equatable {
   }
 
   factory Chat.fromMap(Map<String, dynamic> map) {
+    final String username =
+        map.containsKey('username') ? map["username"] : map['user']['username'];
+    final String timestamp =
+        map.containsKey('timestamp') ? map["timestamp"] : map['time_stamp'];
+
     return Chat(
       message: map['message'] ?? '',
-      timeStamp: map['time_stamp'] ?? '',
-      username: map['username'] ?? '',
+      timeStamp: timestamp,
+      username: username,
     );
   }
 

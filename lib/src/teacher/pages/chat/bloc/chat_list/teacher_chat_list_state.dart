@@ -2,11 +2,13 @@ part of 'teacher_chat_list_bloc.dart';
 
 class TeacherChatListState extends Equatable {
   final UserListResponseModel userListResponseModel;
+  final ChatSessionModel chatSessionModel;
   final ViewStatus viewStatus;
   final String? errorMessage;
 
   const TeacherChatListState({
     required this.userListResponseModel,
+    required this.chatSessionModel,
     this.viewStatus = ViewStatus.none,
     this.errorMessage,
   });
@@ -15,8 +17,10 @@ class TeacherChatListState extends Equatable {
     UserListResponseModel? userListResponseModel,
     ViewStatus? viewStatus,
     String? errorMessage,
+    ChatSessionModel? chatSessionModel,
   }) {
     return TeacherChatListState(
+      chatSessionModel: chatSessionModel ?? this.chatSessionModel,
       userListResponseModel:
           userListResponseModel ?? this.userListResponseModel,
       viewStatus: viewStatus ?? this.viewStatus,
@@ -29,9 +33,11 @@ class TeacherChatListState extends Equatable {
         userListResponseModel,
         viewStatus,
         errorMessage,
+        chatSessionModel,
       ];
 }
 
 final class TeacherChatListInitial extends TeacherChatListState {
-  const TeacherChatListInitial({required super.userListResponseModel});
+  const TeacherChatListInitial(
+      {required super.userListResponseModel, required super.chatSessionModel});
 }

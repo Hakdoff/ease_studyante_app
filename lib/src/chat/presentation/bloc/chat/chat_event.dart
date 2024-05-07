@@ -4,10 +4,32 @@ abstract class ChatEvent extends Equatable {
   const ChatEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-class OnGetInitialChat extends ChatEvent {}
+class OnGetInitialChat extends ChatEvent {
+  final ChatSession? chatSession;
+  final String roomName;
+  final String personId;
+  final String teacherId;
+
+  const OnGetInitialChat({
+    required this.roomName,
+    required this.teacherId,
+    required this.personId,
+    this.chatSession,
+  });
+
+  @override
+  List<Object?> get props => [
+        roomName,
+        chatSession,
+        personId,
+        teacherId,
+      ];
+}
+
+class OnPaginateChat extends ChatEvent {}
 
 class OnTryConnectToWebSocket extends ChatEvent {}
 

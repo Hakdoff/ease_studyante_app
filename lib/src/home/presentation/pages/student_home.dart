@@ -17,12 +17,12 @@ import 'package:ease_studyante_app/src/landing/presentation/landing_page.dart';
 import 'package:ease_studyante_app/src/subject/presentation/pages/subject_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:open_file/open_file.dart';
+// import 'package:open_file/open_file.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:path_provider/path_provider.dart';
+// import 'package:path_provider/path_provider.dart';
 
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
+// import 'package:pdf/pdf.dart';
+// import 'package:pdf/widgets.dart' as pw;
 
 class StudentHome extends StatefulWidget {
   const StudentHome({super.key, required this.isParent});
@@ -94,43 +94,43 @@ class _StudentHomeState extends State<StudentHome> {
               ),
               appBar: AppBar(
                 actions: [
-                  IconButton(
-                    onPressed: () async {
-                      final pdf = pw.Document();
-                      pdf.addPage(
-                        pw.Page(
-                          pageFormat: PdfPageFormat.a4,
-                          build: (pw.Context context) {
-                            return pw.Center(
-                              child: pw.Text(
-                                'Hello World',
-                              ),
-                            );
-                          },
-                        ),
-                      );
+                  // IconButton(
+                  //   onPressed: () async {
+                  //     final pdf = pw.Document();
+                  //     pdf.addPage(
+                  //       pw.Page(
+                  //         pageFormat: PdfPageFormat.a4,
+                  //         build: (pw.Context context) {
+                  //           return pw.Center(
+                  //             child: pw.Text(
+                  //               'Hello World',
+                  //             ),
+                  //           );
+                  //         },
+                  //       ),
+                  //     );
 
-                      try {
-                        Directory root =
-                            await getApplicationDocumentsDirectory();
-                        String path = '${root.path}/grades.pdf';
-                        final file = File(path);
-                        await file.writeAsBytes(await pdf.save());
-                        OpenFile.open('${root.path}/grades.pdf');
-                      } catch (e) {
-                        // ignore: use_build_context_synchronously
-                        CommonDialog.showMyDialog(
-                          context: context,
-                          body:
-                              'Oops! Something went wrong please try again later',
-                        );
-                      }
-                    },
-                    icon: const Icon(
-                      Icons.print,
-                      color: Colors.white,
-                    ),
-                  ),
+                  //     try {
+                  //       Directory root =
+                  //           await getApplicationDocumentsDirectory();
+                  //       String path = '${root.path}/grades.pdf';
+                  //       final file = File(path);
+                  //       await file.writeAsBytes(await pdf.save());
+                  //       OpenFile.open('${root.path}/grades.pdf');
+                  //     } catch (e) {
+                  //       // ignore: use_build_context_synchronously
+                  //       CommonDialog.showMyDialog(
+                  //         context: context,
+                  //         body:
+                  //             'Oops! Something went wrong please try again later',
+                  //       );
+                  //     }
+                  //   },
+                  //   icon: const Icon(
+                  //     Icons.print,
+                  //     color: Colors.white,
+                  //   ),
+                  // ),
                 ],
                 title: const CustomText(
                   style: TextStyle(
