@@ -60,7 +60,7 @@ class _TeacherChatListScreenState extends State<TeacherChatListScreen> {
 
               if (state.viewStatus == ViewStatus.failed) {
                 return const Center(
-                  child: Text('Something went wrong'),
+                  child: Text(' '),
                 );
               }
 

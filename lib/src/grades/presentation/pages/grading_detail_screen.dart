@@ -131,21 +131,21 @@ class _GradingDetailScreenState extends State<GradingDetailScreen> {
                   Visibility(
                     visible: assignmentComponent.isNotEmpty,
                     child: GradingComponentTileWidget(
-                      componentTitle: 'Assignment',
+                      componentTitle: 'Written Works',
                       componentItems: assignmentComponent,
                     ),
                   ),
                   Visibility(
                     visible: quizComponent.isNotEmpty,
                     child: GradingComponentTileWidget(
-                      componentTitle: 'Quiz',
+                      componentTitle: 'Performance Tasks',
                       componentItems: quizComponent,
                     ),
                   ),
                   Visibility(
                     visible: examComponent.isNotEmpty,
                     child: GradingComponentTileWidget(
-                      componentTitle: 'Exam',
+                      componentTitle: 'Quarterly Assessments',
                       componentItems: examComponent,
                     ),
                   ),

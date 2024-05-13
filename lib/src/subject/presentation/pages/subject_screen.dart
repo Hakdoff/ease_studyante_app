@@ -140,6 +140,21 @@ class _SubjectScreenState extends State<SubjectScreen> {
                           Text(
                             'Email: ${students[index].user.email}',
                           ),
+                          if (widget.isParent) ...[
+                            Text(
+                              'Learner Reference Number: ${students[index].lrn}',
+                            ),
+                          ] else ...[
+                            ValueListenableBuilder(
+                              valueListenable: selectedStudent,
+                              builder: (context, currentStudent, child) {
+                                final lrn = currentStudent?.lrn ?? '';
+                                return Text(
+                                  'Learner Reference Number: $lrn',
+                                );
+                              },
+                            ),
+                          ],
                           Text(
                             'Grade: ${students[index].yearLevel}',
                           ),

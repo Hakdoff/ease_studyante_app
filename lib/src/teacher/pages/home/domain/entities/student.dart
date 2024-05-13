@@ -10,6 +10,7 @@ class Student extends Equatable {
   final String contactNumber;
   final int age;
   final String gender;
+  final String lrn;
   final String yearLevel;
   final String? profilePhoto;
   final String pk;
@@ -20,6 +21,7 @@ class Student extends Equatable {
     required this.contactNumber,
     required this.age,
     required this.gender,
+    required this.lrn,
     required this.yearLevel,
     required this.pk,
     this.profilePhoto,
@@ -31,6 +33,7 @@ class Student extends Equatable {
     String? contactNumber,
     int? age,
     String? gender,
+    String? lrn,
     String? yearLevel,
     String? profilePhoto,
     String? pk,
@@ -42,6 +45,7 @@ class Student extends Equatable {
       contactNumber: contactNumber ?? this.contactNumber,
       age: age ?? this.age,
       gender: gender ?? this.gender,
+      lrn: lrn ?? this.lrn,
       yearLevel: yearLevel ?? this.yearLevel,
       profilePhoto: profilePhoto ?? this.profilePhoto,
     );
@@ -55,6 +59,7 @@ class Student extends Equatable {
       contactNumber: map['contact_number'] ?? '',
       age: map['age']?.toInt() ?? 0,
       gender: map['gender'] ?? '',
+      lrn: map['lrn'] ?? '',
       yearLevel: map['year_level'] ?? '',
       profilePhoto: map['profile_photo'],
     );
@@ -65,7 +70,7 @@ class Student extends Equatable {
 
   @override
   String toString() {
-    return 'Student(user: $user, address: $address, contactNumber: $contactNumber, age: $age, gender: $gender, yearLevel: $yearLevel, profilePhoto: $profilePhoto)';
+    return 'Student(user: $user, address: $address, contactNumber: $contactNumber, age: $age, gender: $gender, lrn: $lrn, yearLevel: $yearLevel, profilePhoto: $profilePhoto)';
   }
 
   @override
@@ -76,6 +81,7 @@ class Student extends Equatable {
       contactNumber,
       age,
       gender,
+      lrn,
       yearLevel,
       profilePhoto,
     ];

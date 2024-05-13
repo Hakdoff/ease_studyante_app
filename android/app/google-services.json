@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "155349634288",
+    "project_id": "easestudyante-4ad26",
+    "storage_bucket": "easestudyante-4ad26.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:155349634288:android:8426ef0d881123c4b10635",
+        "android_client_info": {
+          "package_name": "com.example.ease_studyante_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdLkkBlV2PU4Fdpld9H8mkmDrj7cplyvc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

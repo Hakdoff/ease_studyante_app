@@ -99,6 +99,9 @@ class StudentProfile extends StatelessWidget {
                             listTile(title: 'Email:', data: profile.email),
                             listTile(title: 'Section:', data: section.name),
                             listTile(
+                                title: 'Learner Reference Number:',
+                                data: profile.lrn),
+                            listTile(
                                 title: 'Year Level:', data: section.yearLevel),
                           ],
                         ),

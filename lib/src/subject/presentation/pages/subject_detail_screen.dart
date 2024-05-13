@@ -222,6 +222,15 @@ class _SubjectDetailScreenState extends State<SubjectDetailScreen> {
                               'Name: ${globalBloc.state.studentProfile.firstName} ${globalBloc.state.studentProfile.lastName}',
                             ),
                           ],
+                          if (widget.isParent || widget.isTeacher) ...[
+                            Text(
+                              'Learner Reference Number: ${widget.selectedStudent?.lrn}',
+                            ),
+                          ] else ...[
+                            Text(
+                              'Learner Reference Number: ${globalBloc.state.studentProfile.lrn}',
+                            ),
+                          ],
                           Text(
                             'Section: ${widget.section.name}',
                           )

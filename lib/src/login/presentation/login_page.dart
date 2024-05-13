@@ -63,8 +63,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    // emailCtrl.text = 'denparent@deped.com';
-    // passwordCtrl.text = 'asd000!!';
     final profileRepository = ProfileRepositoryImpl();
     loginBloc = LoginBloc(
       LoginRepositoryImpl(),

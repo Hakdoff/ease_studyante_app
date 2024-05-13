@@ -11,6 +11,7 @@ class Profile {
   final String profilePk;
   final String? profilePhoto;
   final String gender;
+  final String lrn;
   final bool isNewUser;
   final List<Student>? students;
 
@@ -22,6 +23,7 @@ class Profile {
     required this.email,
     required this.profilePk,
     required this.gender,
+    required this.lrn,
     required this.isNewUser,
     this.profilePhoto,
     this.students,
@@ -36,6 +38,7 @@ class Profile {
       email: '',
       profilePk: '',
       gender: '',
+      lrn: '',
       isNewUser: false,
       students: [],
     );
@@ -50,6 +53,7 @@ class Profile {
     String? profilePk,
     String? profilePhoto,
     String? gender,
+    String? lrn,
     bool? isNewUser,
   }) {
     return Profile(
@@ -61,6 +65,7 @@ class Profile {
       profilePk: profilePk ?? this.profilePk,
       profilePhoto: profilePhoto ?? this.profilePhoto,
       gender: gender ?? this.gender,
+      lrn: lrn ?? this.lrn,
       isNewUser: isNewUser ?? this.isNewUser,
     );
   }
@@ -75,6 +80,7 @@ class Profile {
       'profilePk': profilePk,
       'profilePhoto': profilePhoto,
       'gender': gender,
+      'lrn': lrn,
       'isNewUser': isNewUser,
     };
   }
@@ -102,6 +108,7 @@ class Profile {
       profilePk: map['profilePk'] as String,
       profilePhoto: map['profilePhoto'] ?? '',
       gender: map['gender'] ?? '',
+      lrn: map['lrn'] ?? '',
       isNewUser: map['is_new_user'] as bool,
       students: parsedStudents,
     );
@@ -114,7 +121,7 @@ class Profile {
 
   @override
   String toString() {
-    return 'Profile(pk: $pk, username: $username, gender: $gender, firstName: $firstName, lastName: $lastName, email: $email, profilePk: $profilePk, profilePhoto: $profilePhoto, isNewUser: $isNewUser)';
+    return 'Profile(pk: $pk, username: $username, gender: $gender, lrn: $lrn,firstName: $firstName, lastName: $lastName, email: $email, profilePk: $profilePk, profilePhoto: $profilePhoto, isNewUser: $isNewUser)';
   }
 
   @override
@@ -127,6 +134,7 @@ class Profile {
         other.lastName == lastName &&
         other.email == email &&
         other.gender == gender &&
+        other.lrn == lrn &&
         other.profilePk == profilePk &&
         other.profilePhoto == profilePhoto &&
         other.isNewUser == isNewUser;
@@ -140,6 +148,7 @@ class Profile {
         lastName.hashCode ^
         email.hashCode ^
         gender.hashCode ^
+        lrn.hashCode ^
         profilePk.hashCode ^
         profilePhoto.hashCode ^
         isNewUser.hashCode;

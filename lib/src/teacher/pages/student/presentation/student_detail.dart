@@ -165,6 +165,7 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
                                 listTile(
                                     title: 'Email:', data: student.user.email),
                                 listTile(title: 'Section:', data: section.name),
+                                listTile(title: 'Learner Reference Number:', data: student.lrn),
                                 listTile(
                                     title: 'Year Level:',
                                     data: section.yearLevel),
